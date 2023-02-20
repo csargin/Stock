@@ -3,11 +3,13 @@
     <table class="table table-striped table-bordered table-hover">
         <thead class="thead-dark">
             <tr>
-                <th class="text-center" style="vertical-align: middle" scope="col"> Stock Name</th>
+                <th class="text-center" style="vertical-align: middle" scope="col">Stock Name</th>
                 <!-- Dictionary of dictionaries-->
                 {% for i in ticker_attribute  %}
                     <th class="text-center" style="vertical-align: middle" scope="col">{{ i }}</th>
                 {% endfor %}
+                <th class="text-center" style="vertical-align: middle" scope="col">Analysis</th>
+                <th class="text-center" style="vertical-align: middle" scope="col">Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -18,6 +20,8 @@
                 {% for i in data %}
                         <td class="text-center" style="vertical-align: middle">{{ i }}</td>
                 {% endfor %}
+                    <td class="text-center" style="vertical-align: middle">Analysis</td>
+                    <td class="text-center" style="vertical-align: middle">Delete</td>
                 </tr>
             {% endfor %}
         </tbody>

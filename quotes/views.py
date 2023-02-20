@@ -59,21 +59,9 @@ def add_stock(request):
         if form.is_valid():
             form.save()
             messages.success(request, ("Stock has been added"))
-            return redirect('add_stock')
+            return redirect('home')
     else:
-        ticker = Stock.objects.all()
-        output = []
-
-        for ticker_item in ticker:
-
-            api_request = requests.get("https://cloud.iexapis.com/stable/stock/" + str(ticker_item) + "/quote?token=pk_6ef09bbbcf8c4046b022672798acc880")
-
-            try:
-                api = json.loads(api_request.content)
-                output.append(api)
-            except Exception as e:
-                api = "Error"
-        return render(request, 'add_stock.html' , {'ticker': ticker , 'output': output})
+        return redirect('home')
 
 
 def delete(request, stock_id):
