@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block content %}
+
+api.info.aapl: {{api.info.aapl.to_html | safe}}</br></br>
+
+{% for i in api.info.aapl.value %}
+    {{ i }}</br>
+{% endfor %}
+</br></br>
+
+{% for j in api.info  %}
+    {{ j }}</br>
+    {{ j.value }}</br>
+    {% for i in j.value %}
+        {{ i }}</br>
+    {% endfor %}
+{% endfor %}
+</br></br>
+
+
+{{ api.info.to_string}}</br></br>
+
+{% for j in api.info  %}
+    {{ j }}</br>
+    {% for i, b in j.itertuples %}
+        {{i.value}}
+        {{b.value}}
+        {{i.index}}
+        {{b.index}}
+    {%endfor%}
+{% endfor %}
+</br></br>
+
+
+
+
+
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th class="text-center" style="vertical-align: middle" scope="col"> Stock Name</th>
+                <!-- Dictionary of dictionaries-->
+                {% for i in api.info.aapl.index %}
+                    <th class="text-center" style="vertical-align: middle" scope="col">{{ i }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for stock_ticker in api.info %}
+                <tr>
+                    <td class="text-center" style="vertical-align: middle">{{ stock_ticker }}</td>
+                    {% for i in api.info.stock_ticker.value %}
+                        <td class="text-center" style="vertical-align: middle">{{ i }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+
+
+
+
+
+
