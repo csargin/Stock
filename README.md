@@ -1,1 +1,1 @@
-A django application for Stock Portfolio.
+Under Construction
