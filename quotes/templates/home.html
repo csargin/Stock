@@ -4,7 +4,6 @@
         <thead class="thead-dark">
             <tr>
                 <th class="text-center" style="vertical-align: middle" scope="col">Stock Name</th>
-                <!-- Dictionary of dictionaries-->
                 {% for i in ticker_attribute  %}
                     <th class="text-center" style="vertical-align: middle" scope="col">{{ i }}</th>
                 {% endfor %}
@@ -19,8 +18,8 @@
                     {% for i in data %}
                         <td class="text-center" style="vertical-align: middle">{{ i }}</td>
                     {% endfor %}
-                    <td class="text-center" style="vertical-align: middle">Analysis</td>
-                    <td class="text-center" style="vertical-align: middle"><a href="{% url 'delete' stock_ticker %}"> Delete</a></td>
+                    <td class="text-center" style="vertical-align: middle"><a href="{% url 'analysis' stock_ticker %}">Analysis</a></td>
+                    <td class="text-center" style="vertical-align: middle"><a href="{% url 'delete' stock_ticker %}">Delete</a></td>
                 </tr>
             {% endfor %}
         </tbody>
