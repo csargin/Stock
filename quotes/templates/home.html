@@ -14,22 +14,15 @@
         </thead>
         <tbody>
             {% for stock_ticker, data in api.items %}
-
                 <tr>
                     <td class="text-center" style="vertical-align: middle">{{ stock_ticker }}</td>
-                {% for i in data %}
+                    {% for i in data %}
                         <td class="text-center" style="vertical-align: middle">{{ i }}</td>
-                {% endfor %}
+                    {% endfor %}
                     <td class="text-center" style="vertical-align: middle">Analysis</td>
-                    <td class="text-center" style="vertical-align: middle">Delete</td>
+                    <td class="text-center" style="vertical-align: middle"><a href="{% url 'delete' stock_ticker %}"> Delete</a></td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
 {% endblock %}
-
-
-
-
-
-

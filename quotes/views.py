@@ -21,9 +21,10 @@ def home(request):
 
             for ticker in ticker_list:
                 api[str(ticker)] = si.get_quote_table(str(ticker), dict_result=False).value.tolist
+
         except Exception as e:
             api = "Error"
-        return render(request, 'home.html',{'api': api , 'ticker_attribute': ticker_attribute })
+        return render(request, 'home.html',{'api': api , 'ticker_attribute': ticker_attribute, 'Stock_objects': Stock.objects.all() })
     else:
         return render(request, 'home.html',{'api': "Portfolio is Empty" })
 
@@ -45,7 +46,7 @@ def search(request):
 
         except Exception as e:
             api = "Error"
-        return render(request, 'search.html',{'api': api, 'ticker': ticker })
+        return render(request, 'search.html',{'api': api, 'ticker': ticker  })
     else:
         return render(request, 'search.html',{'ticker': "Enter a ticker symbol" })
 
@@ -64,12 +65,8 @@ def add_stock(request):
         return redirect('home')
 
 
-def delete(request, stock_id):
-    item = Stock.objects.get(pk=stock_id)
+def delete(request, stock_name):
+    item = Stock.objects.filter(ticker = stock_name)
     item.delete()
     messages.success(request, ("Stock has been deleted"))
     return redirect('home')
-
-def delete_stock(request):
-    ticker = Stock.objects.all()
-    return render(request, 'delete_stock.html' , {'ticker': ticker})

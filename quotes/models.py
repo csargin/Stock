@@ -34,19 +34,7 @@ class Stock(models.Model):
     def __str__(self):
         return self.ticker
 
-class Stock_timeline(models.Model):
-    stock = models.ForeignKey(Stock, on_delete = models.CASCADE)
-    quote = models.CharField(max_length = 10)
-    Date = models.DateField()
-    Open = models.CharField(max_length = 10)
-    High = models.CharField(max_length = 10)
-    Low = models.CharField(max_length = 10)
-    Close = models.CharField(max_length = 10)
-    Adj_Close = models.CharField(max_length = 10)
-    Volume = models.CharField(max_length = 10)
 
-    def __str__(self):
-        return self.ticker
 
 
 
