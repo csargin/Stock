@@ -8,6 +8,7 @@ import pandas as pd
 import numpy as np
 import requests
 import json
+import os
 
 # Create your views here.
 # https://theautomatic.net/yahoo_fin-documentation
@@ -70,31 +71,32 @@ def analysis(request, stock_name):
     from datetime import date
 
     today = date.today().strftime("%Y-%m-%d")
+
+    temp = si.get_data(stock_name, start_date = "2023-01-01", end_date = today, index_as_date = False, interval = "1d")
+    api = pd.DataFrame(data=temp).drop(['ticker'], axis=1)
+
     try:
-        temp = si.get_data(stock_name, start_date = "2023-01-01", end_date = today, index_as_date = True, interval = "1d")
-        api= pd.DataFrame(data=temp).drop(['ticker'], axis=1)
+        temp = si.get_data(stock_name, start_date = "2023-01-01", end_date = today, index_as_date = False, interval = "1d")
+        api = pd.DataFrame(data=temp).drop(['ticker'], axis=1)
+
+        chart_data = []
+        for d,v in api.iterrows():
+            dct ={}
+            dct["date"] = v.date.strftime("%Y-%m-%d")
+            dct["open"] = v.open
+            dct["high"] = v.high
+            dct["low"] = v.low
+            dct["close"] = v.close
+            dct["adjclose"] = v.adjclose
+            dct["volume"] = v.volume
+            if (pd.isnull([v.date.strftime("%Y-%m-%d"), v.open, v.high, v.low, v.close, v.adjclose, v.volume]).any()) == False:
+                chart_data.append(dct)
+
+        with open("/home/csargin/stocks/quotes/static/data.json", "w") as outfile:
+            json.dump(chart_data, outfile , indent=7)
     except Exception as e:
         api = "Error"
-    return render(request, 'analysis.html', {'api': api, 'ticker': stock_name })
+    return render(request, 'analysis.html', {'api': api, 'ticker': stock_name , 'chart_data': chart_data })
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# {% with v.docs|first as first_doc %}{{ first_doc.id }}{% endwith %}

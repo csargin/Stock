@@ -1,0 +1,5 @@
+#https://www.section.io/engineering-education/representing-data-in-django-using-matplotlib/
+
+django-crispy-forms
+yahoo_fin
+pandas
