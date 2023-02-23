@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load static %}
 
         <script type="text/javascript" src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.stock.min.js"></script>
@@ -46,18 +47,17 @@
                      dataPoints: dps2
                    }],
                   slider: {
-                    minimum: new Date(2011, 03, 01),
+                    minimum: new Date(2020, 01, 01),
                     maximum: new Date(2025, 05, 01)
                   }
                 }
               });
 
-              $.getJSON("/home/csargin/stocks/quotes/static/data.json", function(data) {
+              $.getJSON("/static/data.json", function(data) {
                 for(var i = 0; i < data.length; i++){
                   dps1.push({x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)]});
                   dps2.push({x: new Date(data[i].date), y: Number(data[i].close)});
                 }
-
                 stockChart.render();
                 var sma = calculateSMA(dps1, 7);
                 stockChart.charts[0].addTo("data", { type: "line", dataPoints: sma, showInLegend: true, yValueFormatString: "$#,###.00", name: "Simple Moving Average"})
@@ -88,8 +88,6 @@
 
     <div id="chartContainer" style="height: 400px; width: 100%;"></div>
     </br></br>
-
-    {{ chart_data.0 }}
 
     <table class="table table-striped table-bordered table-hover">
         <thead class="thead-dark">

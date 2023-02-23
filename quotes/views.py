@@ -70,13 +70,8 @@ def delete(request, stock_name):
 def analysis(request, stock_name):
     from datetime import date
 
-    today = date.today().strftime("%Y-%m-%d")
-
-    temp = si.get_data(stock_name, start_date = "2023-01-01", end_date = today, index_as_date = False, interval = "1d")
-    api = pd.DataFrame(data=temp).drop(['ticker'], axis=1)
-
     try:
-        temp = si.get_data(stock_name, start_date = "2023-01-01", end_date = today, index_as_date = False, interval = "1d")
+        temp = si.get_data(stock_name,  index_as_date = False, interval = "1d")
         api = pd.DataFrame(data=temp).drop(['ticker'], axis=1)
 
         chart_data = []
