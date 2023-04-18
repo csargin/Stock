@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-e28$(c&+$s-2z)e^o*2ojww9=v--a18^$8ns&d-am3bjt8seo^"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "quotes",
-    "crispy_forms",
 ]
+
+#"crispy_forms",
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -50,8 +51,10 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+
 ]
+
+#'whitenoise.middleware.WhiteNoiseMiddleware',
 
 ROOT_URLCONF = "stocks.urls"
 
@@ -80,7 +83,7 @@ WSGI_APPLICATION = "stocks.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": os.path.join(BASE_DIR / "db.sqlite3"),
     }
 }
 

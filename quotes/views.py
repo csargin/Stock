@@ -14,25 +14,32 @@ import os
 # https://theautomatic.net/yahoo_fin-documentation
 # https://algotrading101.com/learn/yahoo-finance-api-guide/
 
+def tr_stock(stock):
+    if (len(stock)>= 6 ) and (stock[-3:]==".IS"):
+        return True
+    else:
+        return False
+
+
+def tr_stock_name(stock):
+    if tr_stock(stock):
+        return stock[:-3]
+    else:
+        return stock
 
 def home(request):
     ticker_list = tuple(Stock.objects.values_list('ticker', flat = True))
-    api = {}
     if len(ticker_list)>0:
         try:
-            ticker_attribute = si.get_quote_table(str(ticker_list[0]), dict_result=False).attribute.tolist
-
-            for ticker in ticker_list:
-                api[str(ticker)] = si.get_quote_table(str(ticker), dict_result=False).value.tolist
-
+            api = ticker_list
         except Exception as e:
             api = "Error"
-        return render(request, 'home.html',{'api': api , 'ticker_attribute': ticker_attribute })
+        return render(request, 'home.html',{'api': api })
     else:
-        return render(request, 'home.html',{'api': "Portfolio is Empty" })
+        return render(request, 'home.html',{'api': "" })
 
 def about(request):
-    return render(request, 'about.html' , {})
+    return render(request, "about.html", {})
 
 def search(request):
 
@@ -40,12 +47,17 @@ def search(request):
         ticker = request.POST['ticker']
 
         try:
-            temp = si.get_quote_table(ticker, dict_result=False).set_index('attribute')
-            api= pd.DataFrame(data=temp)
+            try:
+                temp = si.get_quote_table(ticker, dict_result=False).set_index('attribute')
+                api= pd.DataFrame(data=temp)
+            except:
+                ticker = ticker + ".IS"
+                temp = si.get_quote_table(ticker, dict_result=False).set_index('attribute')
+                api= pd.DataFrame(data=temp)
 
         except Exception as e:
             api = "Error"
-        return render(request, 'search.html',{'api': api, 'ticker': ticker  })
+        return render(request, 'search.html',{'api': api, 'ticker': ticker.upper()  })
     else:
         return render(request, 'search.html',{'ticker': "Enter a ticker symbol" })
 
@@ -67,8 +79,27 @@ def delete(request, stock_name):
     messages.success(request, ("Stock has been deleted"))
     return redirect('home')
 
-def analysis(request, stock_name):
+def analysis(request, stock_name): #https://canvasjs.com/javascript-stockcharts/simple-moving-average-stockchart/
     from datetime import date
+
+    try:
+        symbol = ""
+        #https://tr.tradingview.com/widget/
+        if tr_stock(stock_name):
+            symbol = "BIST:" + stock_name[:-3]
+        elif stock_name in si.tickers_dow():
+            # get list of Dow stocks
+            symbol = stock_name
+        elif stock_name in si.tickers_nasdaq():
+            # get list of NASDAQ stocks
+            symbol = "NASDAQ:" + stock_name
+        elif stock_name in si.tickers_sp500():
+            # get list of S&P 500 tickers
+            symbol = stock_name
+        else:
+            symbol = stock_name
+    except:
+        symbol = stock_name
 
     try:
         temp = si.get_data(stock_name,  index_as_date = False, interval = "1d")
@@ -87,11 +118,23 @@ def analysis(request, stock_name):
             if (pd.isnull([v.date.strftime("%Y-%m-%d"), v.open, v.high, v.low, v.close, v.adjclose, v.volume]).any()) == False:
                 chart_data.append(dct)
 
-        with open("/home/csargin/stocks/quotes/static/data.json", "w") as outfile:
+        home_dir = os.getcwd()
+        folder_path = os.path.join(home_dir, "stocks/quotes/static/forecasts", tr_stock_name(stock_name))
+        file_path = os.path.join(folder_path , "data.json")
+        isExist = os.path.exists(folder_path)
+        if not isExist:
+            os.makedirs(folder_path)
+
+        with open(file_path, "w") as outfile:
             json.dump(chart_data, outfile , indent=7)
     except Exception as e:
         api = "Error"
-    return render(request, 'analysis.html', {'api': api, 'ticker': stock_name , 'chart_data': chart_data })
+    return render(request, 'analysis.html', {'api': api, 'ticker': symbol, 'tr_stock': tr_stock_name(stock_name)  })
 
+def calendar(request):
+    return render(request, 'calendar.html' , {})
 
-# {% with v.docs|first as first_doc %}{{ first_doc.id }}{% endwith %}
+def forecast(request, stock_name):
+    # https://canvasjs.com/javascript-stockcharts/line-stockchart-json/
+    # https://canvasjs.com/python-charts/python-charts-data-binding/line-chart-data-csv/
+    return render(request, 'forecast.html', {'ticker': "appl", 'tr_stock': tr_stock_name(stock_name)})

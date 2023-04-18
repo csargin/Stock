@@ -12,6 +12,8 @@ urlpatterns = [
     path('delete/<stock_name>', views.delete, name ="delete"),
     path('analysis/<stock_name>', views.analysis, name ="analysis"),
     path('admin/', admin.site.urls),
+    path('calendar.html', views.calendar, name ="calendar"),
+    path('forecast/<stock_name>', views.forecast, name ="forecast"),
 
 ]
 
