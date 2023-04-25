@@ -41,6 +41,9 @@ def home(request):
 def about(request):
     return render(request, "about.html", {})
 
+def generator(request):
+    return render(request, "generator.html", {})
+
 def search(request):
 
     if request.method == 'POST':
@@ -137,4 +140,4 @@ def calendar(request):
 def forecast(request, stock_name):
     # https://canvasjs.com/javascript-stockcharts/line-stockchart-json/
     # https://canvasjs.com/python-charts/python-charts-data-binding/line-chart-data-csv/
-    return render(request, 'forecast.html', {'ticker': "appl", 'tr_stock': tr_stock_name(stock_name)})
+    return render(request, 'forecast.html', {'ticker': stock_name, 'tr_stock': tr_stock_name(stock_name)})

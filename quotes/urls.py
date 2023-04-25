@@ -14,6 +14,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('calendar.html', views.calendar, name ="calendar"),
     path('forecast/<stock_name>', views.forecast, name ="forecast"),
+    path('generator.html', views.generator, name ="generator"),
 
 ]
 
